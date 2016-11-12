@@ -5,14 +5,56 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import br.unifor.dao.DepartamentoDAO;
+import br.unifor.dao.EstacionamentoDAO;
+import br.unifor.entity.Departamento;
 import br.unifor.entity.Estacionamento;
 import br.unifor.entity.Projeto;
 import br.unifor.bean.EstacionamentoBeanRemote;
 
 @Stateless
 public class EstacionamentoBean implements EstacionamentoBeanRemote {
+	
+	
+	@EJB
+    private EstacionamentoDAO estacionamentoDAO;
+
+    @Override
+    public Collection<Estacionamento> lista() {
+        return this.estacionamentoDAO.lista();
+        
+    }
+    @Override
+    public String insere(Estacionamento estacionamento) {
+    this.estacionamentoDAO.insere(estacionamento);
+    return "estacionamento " + estacionamento.getCodigo() + " adicionado.";
+    }
+    @Override
+    public String remove(Long id) {
+    String nome = estacionamentoDAO.busca(id).getCodigo();
+    estacionamentoDAO.remove(id);
+
+    return "estacionamento " + nome + " foi removido.";
+    }
+    @Override
+    public Estacionamento busca(Long id) {
+    System.out.println("ID: "+id);
+    return estacionamentoDAO.busca(id);
+    }
+    @Override
+    public String altera(Estacionamento estacionamento) {
+    String nome = estacionamento.getCodigo();
+    estacionamentoDAO.altera(estacionamento);
+    return "estacionamento " + nome + " alterado para "+ estacionamento.getCodigo();
+    }
+
+	
+	
+	
+	/*
 	
 	static private Map<Integer, Estacionamento> estacionamentoMap;
 
@@ -73,5 +115,5 @@ public class EstacionamentoBean implements EstacionamentoBeanRemote {
 	return "Estacionamento " + nome + " foi removido.";
 	}
 
-
+*/
 }

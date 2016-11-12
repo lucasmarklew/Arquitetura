@@ -5,15 +5,57 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import br.unifor.bean.DepartamentoBeanRemote;
+import br.unifor.dao.DepartamentoDAO;
+import br.unifor.dao.EmpregadoDAO;
 import br.unifor.entity.Departamento;
+import br.unifor.entity.Empregado;
 import br.unifor.entity.Estacionamento;
 
 
 @Stateless
 public class DepartamentoBean implements DepartamentoBeanRemote{
+	
+	@EJB
+    private DepartamentoDAO departamentoDAO;
+
+    @Override
+    public Collection<Departamento> lista() {
+        return this.departamentoDAO.lista();   
+    }
+    
+    @Override
+    public String insere(Departamento departamento) {
+    this.departamentoDAO.insere(departamento);
+    return "departamento " + departamento.getNome() + " adicionado.";
+    }
+    @Override
+    public String remove(Long id) {
+    String nome = departamentoDAO.busca(id).getNome();
+    departamentoDAO.remove(id);
+
+    return "departamento " + nome + " foi removido.";
+    }
+    @Override
+    public Departamento busca(Long id) {
+    System.out.println("ID: "+id);
+    return departamentoDAO.busca(id);
+    }
+    @Override
+    public String altera(Departamento departamento) {
+    String nome = departamento.getNome();
+    departamentoDAO.altera(departamento);
+    return "departamento " + nome + " alterado para "+ departamento.getNome();
+    }
+	
+	
+	
+	
+	
+	/*
 	
 	static private Map<Integer, Departamento> departamentoMap;
 
@@ -78,6 +120,6 @@ public class DepartamentoBean implements DepartamentoBeanRemote{
 
 	
 	
-	
+	*/
 
 }
